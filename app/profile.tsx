@@ -1,11 +1,15 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import { Check } from '@tamagui/lucide-icons'
+import { Checkbox } from 'tamagui'
 
 const Profile = () => {
   return (
-    <View>
-      <Text>profile</Text>
-    </View>
+    <Checkbox size="$4">
+      <Checkbox.Indicator>
+        <Check />
+      </Checkbox.Indicator>
+    </Checkbox>
   )
 }
 
