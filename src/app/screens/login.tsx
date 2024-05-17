@@ -8,6 +8,7 @@ import {
   useFonts,
   VarelaRound_400Regular,
 } from "@expo-google-fonts/varela-round";
+import Background from "@/src/components/background";
 
 // import { ThemedText } from '@/components/ThemedText';
 // import { ThemedView } from '@/components/ThemedView';
@@ -28,6 +29,7 @@ export default function LoginScreen() {
     return <AppLoading />;
   } else {
     return (
+    <Background>
       <View style={styles.container}>
         <Text style={styles.header}>
           Create a Username and Password for your REMedy account
@@ -53,6 +55,7 @@ export default function LoginScreen() {
           </Button>
         </Link>
       </View>
+    </Background>
     );
   }
 }
