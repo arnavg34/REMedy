@@ -1,6 +1,9 @@
 import { Link, Stack } from "expo-router";
 import React, { useState } from "react";
-import { StyleSheet, View, Text, TextInput, Button } from "react-native";
+import { StyleSheet } from "react-native";
+import { Input, Button, Text, View } from "tamagui";
+import { LogIn } from "@tamagui/lucide-icons";
+import { VarelaRound_400Regular } from "@expo-google-fonts/varela-round";
 
 // import { ThemedText } from '@/components/ThemedText';
 // import { ThemedView } from '@/components/ThemedView';
@@ -16,15 +19,18 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.header}>
+        Create a Username and Password for your REMedy account
+      </Text>
       <Text style={styles.label}>Username</Text>
-      <TextInput
+      <Input
         style={styles.input}
         onChangeText={setUsername}
         value={username}
         placeholder="Enter your username"
       />
       <Text style={styles.label}>Password</Text>
-      <TextInput
+      <Input
         style={styles.input}
         onChangeText={setPassword}
         value={password}
@@ -32,7 +38,9 @@ export default function LoginScreen() {
         placeholder="Enter your password"
       />
       <Link href="/terms" asChild>
-        <Button title="Login" onPress={handleLogin} />
+        <Button iconAfter={LogIn} onPress={handleLogin} style={styles.button}>
+          Log In
+        </Button>
       </Link>
     </View>
   );
@@ -43,18 +51,28 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: 20,
+  },
+  header: {
+    fontSize: 24,
+    marginBottom: "5%",
+    fontFamily: "VarelaRound_400Regular",
   },
   label: {
     fontSize: 18,
-    marginBottom: 5,
+    marginTop: "2%",
+    fontFamily: "VarelaRound_400Regular",
   },
   input: {
-    width: "100%",
-    height: 40,
+    width: "30%",
+    height: "5%",
     borderColor: "gray",
     borderWidth: 1,
-    paddingHorizontal: 10,
-    marginBottom: 20,
+    paddingHorizontal: "2%",
+    marginTop: "2%",
+  },
+  button: {
+    backgroundColor: "blue",
+    color: "white",
+    marginTop: "2%",
   },
 });
