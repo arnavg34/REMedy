@@ -1,17 +1,15 @@
-import React, { ReactNode } from 'react';
-import { View, StyleSheet, ViewStyle } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
+import React, { FunctionComponent } from 'react';
+import { StyleSheet } from 'react-native';
+import { LinearGradient } from 'tamagui/linear-gradient';
 
 interface BackgroundProps {
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
-const Background: React.FC<BackgroundProps> = ({ children }) => {
+const Background: FunctionComponent<BackgroundProps> = ({ children }) => {
   return (
     <LinearGradient colors={['#2948FF', '#6B439E']} style={styles.gradient}>
-      <View style={styles.container}>
-        {children}
-      </View>
+      {children}
     </LinearGradient>
   );
 };
@@ -19,10 +17,7 @@ const Background: React.FC<BackgroundProps> = ({ children }) => {
 const styles = StyleSheet.create({
   gradient: {
     flex: 1,
-  } as ViewStyle,
-  container: {
-    flex: 1,
-  } as ViewStyle,
+  },
 });
 
 export default Background;

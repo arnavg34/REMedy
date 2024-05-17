@@ -1,10 +1,9 @@
-// src/screens/TermsScreen.tsx
 import React, { useState } from "react";
-import { H4, H5, H6, YStack, XStack } from 'tamagui';
+import { H4, H5, H6, YStack, XStack, Checkbox} from 'tamagui';
+import { LinearGradient } from 'tamagui/linear-gradient'
 import { Check } from '@tamagui/lucide-icons';
-import { Checkbox } from 'tamagui';
-import { LinearGradient } from 'tamagui/linear-gradient';
-import Background from "../../components/background";
+import { BackHandler, StyleSheet, ViewStyle } from 'react-native';
+import Background from "@/src/components/background";
 
 export default function TermsScreen() {
   const [isChecked1, setIsChecked1] = useState(false);
@@ -74,3 +73,4 @@ export default function TermsScreen() {
     </Background>
   );
 }
+
