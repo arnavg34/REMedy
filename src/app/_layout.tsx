@@ -1,29 +1,29 @@
-import React from 'react';
-import { TamaguiProvider, createTamagui } from '@tamagui/core';
-import { config } from '@tamagui/config/v3';
-import { Stack } from 'expo-router';
-import TermsScreen from './screens/terms';
-import LoginScreen from './screens/login';
-import Profile from './screens/profile';
-
+import React from "react";
+import { TamaguiProvider, createTamagui } from "@tamagui/core";
+import { config } from "@tamagui/config/v3";
+import { Stack } from "expo-router";
+import TermsScreen from "./(screens)/terms";
+import LoginScreen from "./(screens)/login";
+import Profile from "./(screens)/profile";
 
 // Create Tamagui config
 const tamaguiConfig = createTamagui(config);
 type Conf = typeof tamaguiConfig;
 
 // Extend TamaguiCustomConfig
-declare module '@tamagui/core' {
+declare module "@tamagui/core" {
   interface TamaguiCustomConfig extends Conf {}
 }
 
 export default function App() {
   return (
     <TamaguiProvider config={tamaguiConfig}>
-        <Stack>
-          <TermsScreen />
-          <LoginScreen/>
-          <Profile />
-        </Stack>
+      <Stack screenOptions={{ headerShown: false }}>
+        <TermsScreen />
+        <LoginScreen />
+        <Profile />
+        <Stack.Screen name="(tabs)" />
+      </Stack>
     </TamaguiProvider>
   );
 }

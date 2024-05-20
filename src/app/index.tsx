@@ -9,7 +9,7 @@ import {
   VarelaRound_400Regular,
 } from "@expo-google-fonts/varela-round";
 
-export default function TermsScreen() {
+export default function startScreen() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -29,7 +29,7 @@ export default function TermsScreen() {
         <View style={styles.container}>
           <Text style={styles.title}>Welcome to REMedy</Text>
           <Text style={styles.txt}>Your personalized sleep tracking app</Text>
-          <Link href="/screens/terms" asChild>
+          <Link href="/terms" asChild>
             <Button onPress={handleLogin} style={styles.button}>
               Get Started
             </Button>
