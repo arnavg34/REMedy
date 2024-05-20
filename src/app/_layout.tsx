@@ -4,9 +4,9 @@ import { config } from "@tamagui/config/v3";
 import { Stack } from "expo-router";
 import TermsScreen from "./(screens)/terms";
 import LoginScreen from "./(screens)/login";
-import SignUpScreen from "./(screens)/signup';
+import SignUpScreen from "./(screens)/signup";
 import Background from '../components/background';
-import Index from '.";
+import Index from '.';
 
 // Create Tamagui config
 const tamaguiConfig = createTamagui(config);

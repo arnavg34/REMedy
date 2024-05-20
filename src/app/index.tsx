@@ -19,7 +19,6 @@ import Background from "../components/background";
 const { width, height } = Dimensions.get("window");
 const STAR_COUNT = 100;
 
-// Generate random stars
 const generateStars = (count: number) => {
   const stars: { size: number; top: number; left: number; key: string; delay: number }[] = [];
   const maxSize = Math.max(width, height); // Get the maximum dimension of the screen
@@ -89,12 +88,6 @@ export default function Index() {
     t.value = frameInfo.timeSinceFirstFrame / 350;
   });
 
-<<<<<<< HEAD
-export default function startScreen() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-=======
->>>>>>> expo-router-arnav
 
   let [fontsLoaded] = useFonts({
     VarelaRound_400Regular,
@@ -111,19 +104,11 @@ export default function startScreen() {
           ))}
         </View>
         <View style={styles.container}>
-<<<<<<< HEAD
-          <Text style={styles.title}>Welcome to REMedy</Text>
-          <Text style={styles.txt}>Your personalized sleep tracking app</Text>
-          <Link href="/terms" asChild>
-            <Button onPress={handleLogin} style={styles.button}>
-              Get Started
-=======
           <Text style={styles.title}>Welcome to REMedy!</Text>
           <Text style={styles.txt}>Having trouble sleeping?</Text>
           <Link href="/screens/terms" asChild>
             <Button style={styles.button}>
               Let's Get Started!
->>>>>>> expo-router-arnav
             </Button>
           </Link>
         </View>
