@@ -4,7 +4,9 @@ import { config } from "@tamagui/config/v3";
 import { Stack } from "expo-router";
 import TermsScreen from "./(screens)/terms";
 import LoginScreen from "./(screens)/login";
-import Profile from "./(screens)/profile";
+import SignUpScreen from "./(screens)/signup';
+import Background from '../components/background';
+import Index from '.";
 
 // Create Tamagui config
 const tamaguiConfig = createTamagui(config);
@@ -21,7 +23,8 @@ export default function App() {
       <Stack screenOptions={{ headerShown: false }}>
         <TermsScreen />
         <LoginScreen />
-        <Profile />
+        <SignUpScreen />
+          <Index />
         <Stack.Screen name="(tabs)" />
       </Stack>
     </TamaguiProvider>

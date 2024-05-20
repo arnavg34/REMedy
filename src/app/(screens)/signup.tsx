@@ -10,7 +10,7 @@ import {
 } from "@expo-google-fonts/varela-round";
 import Background from "@/src/components/background";
 
-export default function LoginScreen() {
+export default function SignUpScreen() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -45,7 +45,7 @@ export default function LoginScreen() {
     return (
       <Background>
         <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
-          <Text style={styles.header}>Log In to Your REMedy Account</Text>
+          <Text style={styles.header}>Sign up for REMedy Account</Text>
           <Text style={styles.label}>Username</Text>
           <Input
             style={styles.input}
@@ -67,17 +67,8 @@ export default function LoginScreen() {
             style={styles.button}
             disabled={loading}
           >
-            {loading ? "Logging In..." : "Log In"}
+            {loading ? "Signing Up....." : "Sign Up"}
           </Button>
-          <View style={styles.signupContainer}>
-            <Text style={styles.signupText}>Don't have an account?</Text>
-            <Link href="/screens/signup" asChild>
-              <Text style={styles.signupLink}>Sign Up</Text>
-            </Link>
-          </View>
-          <Link href="/forgot-password" asChild>
-            <Text style={styles.forgotPasswordLink}>Forgot your password?</Text>
-          </Link>
         </Animated.View>
       </Background>
     );
