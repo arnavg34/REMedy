@@ -9,12 +9,19 @@ import {
   VarelaRound_400Regular,
 } from "@expo-google-fonts/varela-round";
 import Background from "@/src/components/background";
+import { FIREBASE_AUTH } from "@/FirebaseConfig";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
 
 export default function SignUpScreen() {
+  const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const fadeAnim = useState(new Animated.Value(0))[0];
+  const auth = FIREBASE_AUTH;
+  const db = getFirestore();
 
   const handleLogin = () => {
     // Perform login actions here
@@ -25,6 +32,22 @@ export default function SignUpScreen() {
       // Redirect to home page after login
       // navigation.navigate('Home');
     }, 2000);
+  };
+
+  const signUp = async () => {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+  
+      // After creating the user, store the username in Firestore
+      await setDoc(doc(db, "users", user.uid), {
+        username: username,
+      });
+  
+      console.log("User created with ID: ", user.uid);
+    } catch (error) {
+      console.error("Error creating user: ", error);
+    }
   };
 
   // Fade in animation
@@ -46,6 +69,13 @@ export default function SignUpScreen() {
       <Background>
         <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
           <Text style={styles.header}>Sign up for REMedy Account</Text>
+          <Text style={styles.label}>Email</Text>
+          <Input
+            style={styles.input}
+            onChangeText={setEmail}
+            value={email}
+            placeholder="Enter your Email"
+          />
           <Text style={styles.label}>Username</Text>
           <Input
             style={styles.input}
@@ -63,7 +93,7 @@ export default function SignUpScreen() {
           />
           <Button
             iconAfter={LogIn}
-            onPress={handleLogin}
+            onPress={signUp}
             style={styles.button}
             disabled={loading}
           >
