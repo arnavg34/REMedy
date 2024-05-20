@@ -9,6 +9,7 @@ import {
   useFonts,
   VarelaRound_400Regular,
 } from "@expo-google-fonts/varela-round";
+import Animated, { SlideInLeft, SlideOutRight } from 'react-native-reanimated';
 
 export default function TermsScreen() {
   const [isChecked1, setIsChecked1] = useState(false);
@@ -90,7 +91,9 @@ export default function TermsScreen() {
               </XStack>
               {(isChecked1 && isChecked2) && (
                 <Link to="/screens/login">
-                  <Button size="$6" backgroundColor="lightblue" width={270}>Continue</Button>
+                  <Animated.View entering={SlideInLeft} exiting={SlideOutRight}>
+                    <Button size="$6" backgroundColor="lightblue" width={270}>Continue</Button>
+                  </Animated.View>
                 </Link>
               )}
             </YStack>
