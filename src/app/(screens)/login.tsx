@@ -29,33 +29,37 @@ export default function LoginScreen() {
     return <AppLoading />;
   } else {
     return (
-    <Background>
-      <View style={styles.container}>
-        <Text style={styles.header}>
-          Create a Username and Password for your REMedy account
-        </Text>
-        <Text style={styles.label}>Username</Text>
-        <Input
-          style={styles.input}
-          onChangeText={setUsername}
-          value={username}
-          placeholder="Enter your username"
-        />
-        <Text style={styles.label}>Password</Text>
-        <Input
-          style={styles.input}
-          onChangeText={setPassword}
-          value={password}
-          secureTextEntry={true}
-          placeholder="Enter your password"
-        />
-        <Link href="/terms" asChild>
-          <Button iconAfter={LogIn} onPress={handleLogin} style={styles.button}>
-            Log In
-          </Button>
-        </Link>
-      </View>
-    </Background>
+      <Background>
+        <View style={styles.container}>
+          <Text style={styles.header}>
+            Create a Username and Password for your REMedy account
+          </Text>
+          <Text style={styles.label}>Username</Text>
+          <Input
+            style={styles.input}
+            onChangeText={setUsername}
+            value={username}
+            placeholder="Enter your username"
+          />
+          <Text style={styles.label}>Password</Text>
+          <Input
+            style={styles.input}
+            onChangeText={setPassword}
+            value={password}
+            secureTextEntry={true}
+            placeholder="Enter your password"
+          />
+          <Link href="/news" asChild>
+            <Button
+              iconAfter={LogIn}
+              onPress={handleLogin}
+              style={styles.button}
+            >
+              Log In
+            </Button>
+          </Link>
+        </View>
+      </Background>
     );
   }
 }
