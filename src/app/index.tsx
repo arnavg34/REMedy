@@ -106,7 +106,7 @@ export default function Index() {
         <View style={styles.container}>
           <Text style={styles.title}>Welcome to REMedy!</Text>
           <Text style={styles.txt}>Having trouble sleeping?</Text>
-          <Link href="/screens/terms" asChild>
+          <Link href="/terms" asChild>
             <Button style={styles.button}>
               Let's Get Started!
             </Button>

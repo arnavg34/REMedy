@@ -61,14 +61,16 @@ export default function LoginScreen() {
             secureTextEntry={true}
             placeholder="Enter your password"
           />
-          <Button
-            iconAfter={LogIn}
-            onPress={handleLogin}
-            style={styles.button}
-            disabled={loading}
-          >
-            {loading ? "Logging In..." : "Log In"}
-          </Button>
+          <Link href="/news" asChild>
+            <Button
+              iconAfter={LogIn}
+              onPress={handleLogin}
+              style={styles.button}
+              disabled={loading}
+            >
+              {loading ? "Logging In..." : "Log In"}
+            </Button>
+          </Link>
           <View style={styles.signupContainer}>
             <Text style={styles.signupText}>Don't have an account?</Text>
             <Link href="/screens/signup" asChild>
