@@ -9,13 +9,45 @@ import {
   VarelaRound_400Regular,
 } from "@expo-google-fonts/varela-round";
 import Background from "@/src/components/background";
+import { FIREBASE_AUTH } from "@/FirebaseConfig";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { getFirestore, collection, query, where, getDocs } from "firebase/firestore";
 
 export default function LoginScreen() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const auth = FIREBASE_AUTH;
   const fadeAnim = useState(new Animated.Value(0))[0];
+  const db = getFirestore();
 
+  const signIn = async () => {
+    setLoading(true);
+    try {
+      // Query Firestore for the document where the username field is equal to the provided username
+      const q = query(collection(db, "users"), where("username", "==", username));
+      const querySnapshot = await getDocs(q);
+  
+      let email: string | null = null;
+  
+      querySnapshot.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots
+        console.log(doc.id, " => ", doc.data());
+        email = doc.data().email;
+      });
+  
+      if (email) {
+        const response = await signInWithEmailAndPassword(auth, email, password);
+        console.log(response);
+      } else {
+        alert("No user found with this username");
+      }
+    } catch (error: any) {
+      console.error(error);
+      alert("Sign in failed: " + error.message);
+    }
+    setLoading(false);
+  };
   const handleLogin = () => {
     // Perform login actions here
     setLoading(true);
@@ -64,7 +96,7 @@ export default function LoginScreen() {
           <Link href="/news" asChild>
             <Button
               iconAfter={LogIn}
-              onPress={handleLogin}
+              onPress={signIn}
               style={styles.button}
               disabled={loading}
             >
