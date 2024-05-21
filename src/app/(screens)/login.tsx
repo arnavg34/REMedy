@@ -73,7 +73,7 @@ export default function LoginScreen() {
           </Link>
           <View style={styles.signupContainer}>
             <Text style={styles.signupText}>Don't have an account?</Text>
-            <Link href="/screens/signup" asChild>
+            <Link href="/signup" asChild>
               <Text style={styles.signupLink}>Sign Up</Text>
             </Link>
           </View>

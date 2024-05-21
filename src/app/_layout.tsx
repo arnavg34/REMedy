@@ -7,15 +7,7 @@ import LoginScreen from "./(screens)/login";
 import SignUpScreen from "./(screens)/signup";
 import Background from '../components/background';
 import Index from '.';
-
-// Create Tamagui config
-const tamaguiConfig = createTamagui(config);
-type Conf = typeof tamaguiConfig;
-
-// Extend TamaguiCustomConfig
-declare module "@tamagui/core" {
-  interface TamaguiCustomConfig extends Conf {}
-}
+import tamaguiConfig from "@/tamagui.config";
 
 export default function App() {
   return (
@@ -24,7 +16,7 @@ export default function App() {
         <TermsScreen />
         <LoginScreen />
         <SignUpScreen />
-          <Index />
+        <Index />
         <Stack.Screen name="(tabs)" />
       </Stack>
     </TamaguiProvider>
