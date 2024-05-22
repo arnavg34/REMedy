@@ -6,8 +6,7 @@ import Background from "@/src/components/background";
 import AppLoading from "expo-app-loading";
 import { useFonts, VarelaRound_400Regular } from "@expo-google-fonts/varela-round";
 import Animated, { SlideInLeft } from "react-native-reanimated";
-import { Link } from "@react-navigation/native";
-
+import { Link } from "expo-router"; 
 export default function TermsScreen() {
   const [isChecked1, setIsChecked1] = useState(false);
   const [isChecked2, setIsChecked2] = useState(false);
@@ -81,7 +80,7 @@ export default function TermsScreen() {
                 </H5>
               </XStack>
 
-              <XStack alignItems="center" space="$2">
+              <XStack alignItems="center" gap="$2">
                 <Checkbox
                   size="$4"
                   checked={isChecked2}
@@ -115,7 +114,7 @@ export default function TermsScreen() {
               {isChecked1 && isChecked2 && (
               
                 <Animated.View entering={SlideInLeft}>
-                  <Link href = '/signup'>
+                  <Link href="/signup" asChild>
                     <Button
                       size="$6"
                       backgroundColor="lightblue"
