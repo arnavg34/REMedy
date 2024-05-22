@@ -1,7 +1,7 @@
 import { Link } from "expo-router";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Animated, Easing } from "react-native";
-import { Input, Button, Text, View } from "tamagui";
+import { Input, Button, Text, View, AlertDialog, XStack, YStack} from "tamagui";
 import { LogIn } from "@tamagui/lucide-icons";
 import AppLoading from "expo-app-loading";
 import {
@@ -12,6 +12,7 @@ import Background from "@/src/components/background";
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { getFirestore, collection, query, where, getDocs } from "firebase/firestore";
+import { Toast, useToastController, useToastState } from '@tamagui/toast'
 
 export default function LoginScreen() {
   const [username, setUsername] = useState("");
@@ -20,6 +21,8 @@ export default function LoginScreen() {
   const auth = FIREBASE_AUTH;
   const fadeAnim = useState(new Animated.Value(0))[0];
   const db = getFirestore();
+  const [isSignedIn, setIsSignedIn] = useState(false);
+  const [dialogVisible, setDialogVisible] = useState(false);
 
   const signIn = async () => {
     setLoading(true);
@@ -37,17 +40,29 @@ export default function LoginScreen() {
       });
   
       if (email) {
-        const response = await signInWithEmailAndPassword(auth, email, password);
-        console.log(response);
+        try {
+          const response = await signInWithEmailAndPassword(auth, email, password);
+          console.log(response);
+          // If sign-in is successful, set isSignedIn to true
+          setIsSignedIn(true);
+        } catch (signInError: any) {
+          console.error(signInError);
+          alert("Sign in failed: " + signInError.message);
+          setIsSignedIn(false);
+          setDialogVisible(true);
+        }
       } else {
         alert("No user found with this username");
+        setIsSignedIn(false);
+        setDialogVisible(true);
       }
     } catch (error: any) {
       console.error(error);
-      alert("Sign in failed: " + error.message);
+      alert("An error occurred: " + error.message);
+      setIsSignedIn(false);
     }
-    setLoading(false);
   };
+  
   const handleLogin = () => {
     // Perform login actions here
     setLoading(true);
@@ -93,7 +108,18 @@ export default function LoginScreen() {
             secureTextEntry={true}
             placeholder="Enter your password"
           />
-          <Link href="/news" asChild>
+          {isSignedIn ? (
+            <Link href="/news">
+              <Button
+                iconAfter={LogIn}
+                onPress={signIn}
+                style={styles.button}
+                disabled={loading}
+              >
+                {loading ? "Logging In..." : "Log In"}
+              </Button>
+            </Link>
+          ) : (
             <Button
               iconAfter={LogIn}
               onPress={signIn}
@@ -102,7 +128,7 @@ export default function LoginScreen() {
             >
               {loading ? "Logging In..." : "Log In"}
             </Button>
-          </Link>
+          )}
           <View style={styles.signupContainer}>
             <Text style={styles.signupText}>Don't have an account?</Text>
             <Link href="/signup" asChild>
@@ -112,6 +138,7 @@ export default function LoginScreen() {
           <Link href="/forgot-password" asChild>
             <Text style={styles.forgotPasswordLink}>Forgot your password?</Text>
           </Link>
+          
         </Animated.View>
       </Background>
     );

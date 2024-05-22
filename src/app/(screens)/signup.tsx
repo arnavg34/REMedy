@@ -13,6 +13,8 @@ import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
+import { useEffect } from 'react';
+
 
 export default function SignUpScreen() {
   const [email, setEmail] = useState("");
@@ -22,6 +24,8 @@ export default function SignUpScreen() {
   const fadeAnim = useState(new Animated.Value(0))[0];
   const auth = FIREBASE_AUTH;
   const db = getFirestore();
+  const [isSignedIn, setIsSignedIn] = useState(false);
+
 
   const handleLogin = () => {
     // Perform login actions here
@@ -35,21 +39,31 @@ export default function SignUpScreen() {
   };
 
   const signUp = async () => {
+    setLoading(true);
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
   
-      // After creating the user, store the username in Firestore
       await setDoc(doc(db, "users", user.uid), {
+        email: email,
         username: username,
       });
   
-      console.log("User created with ID: ", user.uid);
-    } catch (error) {
-      console.error("Error creating user: ", error);
+      console.log("User signed up:", user.uid);
+      
+      setIsSignedIn(true);
+    } catch (error: any) {
+      console.error(error);
+      alert("Sign up failed: " + error.message);
     }
+    setLoading(false);
   };
-
+  
+  useEffect(() => {
+    if (isSignedIn) {
+      window.location.href = "/news";
+    }
+  }, [isSignedIn]);
   // Fade in animation
   Animated.timing(fadeAnim, {
     toValue: 1,
@@ -91,14 +105,26 @@ export default function SignUpScreen() {
             secureTextEntry={true}
             placeholder="Enter your password"
           />
-          <Button
-            iconAfter={LogIn}
-            onPress={signUp}
-            style={styles.button}
-            disabled={loading}
-          >
-            {loading ? "Signing Up....." : "Sign Up"}
-          </Button>
+          {isSignedIn ? (
+            <Link href="/news">
+              <Button
+                iconAfter={LogIn}
+                style={styles.button}
+                disabled={loading}
+              >
+                {loading ? "Signing Up..." : "Sign Up"}
+              </Button>
+            </Link>
+          ) : (
+            <Button
+              iconAfter={LogIn}
+              onPress={signUp}
+              style={styles.button}
+              disabled={loading}
+            >
+              {loading ? "Signing Up..." : "Sign Up"}
+            </Button>
+          )}
         </Animated.View>
       </Background>
     );
