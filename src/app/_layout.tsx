@@ -17,7 +17,7 @@ export default function App() {
         <LoginScreen />
         <SignUpScreen />
         <Index />
-        <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="(screens)/home" />
       </Stack>
     </TamaguiProvider>
   );
