@@ -99,9 +99,9 @@ export default function Index() {
     return (
       <Background>
         <View style={StyleSheet.absoluteFill}>
-          {stars.map((star) => (
+          {/* {stars.map((star) => (
             <Star key={star.key} size={star.size} top={star.top} left={star.left} />
-          ))}
+          ))} */}
         </View>
         <View style={styles.container}>
           <Text style={styles.title}>Welcome to REMedy!</Text>
