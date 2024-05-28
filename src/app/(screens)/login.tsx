@@ -8,7 +8,8 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
-  View
+  View,
+  TouchableOpacity,
 } from 'react-native';
 import { Button, Text } from 'tamagui';
 import { LogIn } from '@tamagui/lucide-icons';
@@ -21,16 +22,29 @@ import { getFirestore, collection, query, where, getDocs } from 'firebase/firest
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Link, useRouter } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen';
+
+
+SplashScreen.preventAutoHideAsync();
 
 export default function LoginScreen() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [loginSuccess, setLoginSuccess] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const fadeAnim = useState(new Animated.Value(0))[0];
   const auth = FIREBASE_AUTH;
   const db = getFirestore();
   const router = useRouter();
+
+
+  useEffect(() => {
+    if (loginSuccess) {
+      router.push('/news');
+    }
+  }, [loginSuccess]);
+
 
   const signIn = async () => {
     setLoading(true);
@@ -52,7 +66,6 @@ export default function LoginScreen() {
       await signInWithEmailAndPassword(auth, email, password);
       setLoginSuccess(true);
       await AsyncStorage.setItem('userToken', 'user_token_here');
-      alert('Logged in!');
     } catch (error) {
       console.error('Sign in failed:', error);
       alert('Sign in failed. Please try again.');
@@ -70,20 +83,15 @@ export default function LoginScreen() {
     }).start();
   }, [fadeAnim]);
 
-  const handleNavigation = () => {
-    if (loginSuccess) {
-      router.push('/news');
-    }
-  };
-
-  useEffect(handleNavigation, [loginSuccess]);
-
   let [fontsLoaded] = useFonts({
     VarelaRound_400Regular,
   });
+  useEffect(() => {
+    SplashScreen.hideAsync();
+  }, [fontsLoaded]);
 
   if (!fontsLoaded) {
-    return <AppLoading />;
+    return null;
   }
 
   return (
@@ -107,20 +115,28 @@ export default function LoginScreen() {
                 autoCapitalize="none"
                 autoCorrect={false}
                 textContentType='oneTimeCode'
+                returnKeyType="next"
               />
             </View>
             <Text style={styles.label}>Password</Text>
-            <View style={styles.inputWrapper}>
+            <View style={[styles.inputWrapper, { flexDirection: 'row', alignItems: 'center' }]}>
               <Ionicons name="lock-closed-outline" size={24} color="gray" style={styles.icon} />
               <TextInput
-                style={styles.input}
+                style={[styles.input, { flex: 1 }]}
                 onChangeText={setPassword}
                 value={password}
-                secureTextEntry={true}
+                secureTextEntry={!passwordVisible}
                 placeholder="Enter your password"
                 placeholderTextColor="gray"
                 textContentType='oneTimeCode'
+
               />
+              <TouchableOpacity
+                onPress={() => setPasswordVisible(!passwordVisible)}
+                style={{ paddingHorizontal: 10 }}
+              >
+                <Ionicons name={passwordVisible ? "eye-off-outline" : "eye-outline"} size={24} color="gray" />
+              </TouchableOpacity>
             </View>
             <Button
               iconAfter={LogIn}
@@ -180,7 +196,6 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
   },
   input: {
-    flex: 1,
     height: 40,
     borderRadius: 25,
     fontFamily: 'VarelaRound_400Regular',
