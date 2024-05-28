@@ -1,71 +1,82 @@
-import { Link } from "expo-router";
-import React, { useState } from "react";
-import { StyleSheet, Animated, Easing } from "react-native";
-import { Input, Button, Text, View } from "tamagui";
-import { LogIn } from "@tamagui/lucide-icons";
-import AppLoading from "expo-app-loading";
+import React, { useState, useEffect } from 'react';
 import {
-  useFonts,
-  VarelaRound_400Regular,
-} from "@expo-google-fonts/varela-round";
-import Background from "@/src/components/background";
-import { FIREBASE_AUTH } from "@/FirebaseConfig";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { getFirestore, collection, query, where, getDocs } from "firebase/firestore";
+  StyleSheet,
+  Animated,
+  Easing,
+  TextInput,
+  TouchableWithoutFeedback,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  View
+} from 'react-native';
+import { Button, Text } from 'tamagui';
+import { LogIn } from '@tamagui/lucide-icons';
+import AppLoading from 'expo-app-loading';
+import { useFonts, VarelaRound_400Regular } from '@expo-google-fonts/varela-round';
+import Background from '@/src/components/background';
+import { FIREBASE_AUTH } from '@/FirebaseConfig';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
+import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Link, useRouter } from 'expo-router';
 
 export default function LoginScreen() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const auth = FIREBASE_AUTH;
+  const [loginSuccess, setLoginSuccess] = useState(false);
   const fadeAnim = useState(new Animated.Value(0))[0];
+  const auth = FIREBASE_AUTH;
   const db = getFirestore();
+  const router = useRouter();
 
   const signIn = async () => {
     setLoading(true);
     try {
-      // Query Firestore for the document where the username field is equal to the provided username
-      const q = query(collection(db, "users"), where("username", "==", username));
+      const q = query(collection(db, 'users'), where('username', '==', username));
       const querySnapshot = await getDocs(q);
-  
-      let email: string | null = null;
-  
+
+      let email = '';
+
       querySnapshot.forEach((doc) => {
-        // doc.data() is never undefined for query doc snapshots
-        console.log(doc.id, " => ", doc.data());
         email = doc.data().email;
       });
-  
-      if (email) {
-        const response = await signInWithEmailAndPassword(auth, email, password);
-        console.log(response);
-      } else {
-        alert("No user found with this username");
+
+      if (!email) {
+        setLoading(false);
+        return alert('No user found with this username');
       }
-    } catch (error: any) {
-      console.error(error);
-      alert("Sign in failed: " + error.message);
-    }
-    setLoading(false);
-  };
-  const handleLogin = () => {
-    // Perform login actions here
-    setLoading(true);
-    // Simulating login delay
-    setTimeout(() => {
+
+      await signInWithEmailAndPassword(auth, email, password);
+      setLoginSuccess(true);
+      await AsyncStorage.setItem('userToken', 'user_token_here');
+      alert('Logged in!');
+    } catch (error) {
+      console.error('Sign in failed:', error);
+      alert('Sign in failed. Please try again.');
+    } finally {
       setLoading(false);
-      // Redirect to home page after login
-      // navigation.navigate('Home');
-    }, 2000);
+    }
   };
 
-  // Fade in animation
-  Animated.timing(fadeAnim, {
-    toValue: 1,
-    duration: 1000,
-    easing: Easing.linear,
-    useNativeDriver: true,
-  }).start();
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 1000,
+      easing: Easing.linear,
+      useNativeDriver: true,
+    }).start();
+  }, [fadeAnim]);
+
+  const handleNavigation = () => {
+    if (loginSuccess) {
+      router.push('/news');
+    }
+  };
+
+  useEffect(handleNavigation, [loginSuccess]);
 
   let [fontsLoaded] = useFonts({
     VarelaRound_400Regular,
@@ -73,103 +84,135 @@ export default function LoginScreen() {
 
   if (!fontsLoaded) {
     return <AppLoading />;
-  } else {
-    return (
-      <Background>
-        <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
-          <Text style={styles.header}>Log In to Your REMedy Account</Text>
-          <Text style={styles.label}>Username</Text>
-          <Input
-            style={styles.input}
-            onChangeText={setUsername}
-            value={username}
-            placeholder="Enter your username"
-          />
-          <Text style={styles.label}>Password</Text>
-          <Input
-            style={styles.input}
-            onChangeText={setPassword}
-            value={password}
-            secureTextEntry={true}
-            placeholder="Enter your password"
-          />
-          <Link href="/news" asChild>
+  }
+
+  return (
+    <Background>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.container}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <Animated.View style={[styles.inner, { opacity: fadeAnim }]}>
+            <Text style={styles.header}>Log In to Your REMedy Account</Text>
+            <Text style={styles.label}>Username</Text>
+            <View style={styles.inputWrapper}>
+              <Ionicons name="person-outline" size={24} color="gray" style={styles.icon} />
+              <TextInput
+                style={styles.input}
+                onChangeText={setUsername}
+                value={username}
+                placeholder="Enter your username"
+                placeholderTextColor="gray"
+                autoCapitalize="none"
+                autoCorrect={false}
+                textContentType='oneTimeCode'
+              />
+            </View>
+            <Text style={styles.label}>Password</Text>
+            <View style={styles.inputWrapper}>
+              <Ionicons name="lock-closed-outline" size={24} color="gray" style={styles.icon} />
+              <TextInput
+                style={styles.input}
+                onChangeText={setPassword}
+                value={password}
+                secureTextEntry={true}
+                placeholder="Enter your password"
+                placeholderTextColor="gray"
+                textContentType='oneTimeCode'
+              />
+            </View>
             <Button
               iconAfter={LogIn}
               onPress={signIn}
               style={styles.button}
               disabled={loading}
             >
-              {loading ? "Logging In..." : "Log In"}
+              {loading ? 'Logging In...' : 'Log In'}
             </Button>
-          </Link>
-          <View style={styles.signupContainer}>
-            <Text style={styles.signupText}>Don't have an account?</Text>
-            <Link href="/signup" asChild>
-              <Text style={styles.signupLink}>Sign Up</Text>
+            <View style={styles.signupContainer}>
+              <Text style={styles.signupText}>Don't have an account?</Text>
+              <Link href="/signup" asChild>
+                <Text style={styles.signupLink}>Sign Up</Text>
+              </Link>
+            </View>
+            <Link href="/forgot-password" asChild>
+              <Text style={styles.forgotPasswordLink}>Forgot your password?</Text>
             </Link>
-          </View>
-          <Link href="/forgot-password" asChild>
-            <Text style={styles.forgotPasswordLink}>Forgot your password?</Text>
-          </Link>
-        </Animated.View>
-      </Background>
-    );
-  }
+          </Animated.View>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
+    </Background>
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+  },
+  inner: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
   },
   header: {
     fontSize: 24,
     marginBottom: 20,
-    fontFamily: "VarelaRound_400Regular",
-    color: "white",
+    fontFamily: 'VarelaRound_400Regular',
+    color: 'white',
   },
   label: {
     fontSize: 18,
     marginTop: 10,
-    fontFamily: "VarelaRound_400Regular",
-    color: "white",
+    fontFamily: 'VarelaRound_400Regular',
+    color: 'white',
+  },
+  inputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 10,
+    width: '80%',
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 25,
+    backgroundColor: 'white',
+    paddingLeft: 10,
   },
   input: {
-    width: "80%",
+    flex: 1,
     height: 40,
-    borderColor: "gray",
-    borderWidth: 1,
-    paddingHorizontal: 10,
-    marginTop: 10,
-    borderRadius: 5,
-    backgroundColor: "white",
+    borderRadius: 25,
+    fontFamily: 'VarelaRound_400Regular',
+    color: 'black',
+  },
+  icon: {
+    marginRight: 10,
   },
   button: {
-    backgroundColor: "blue",
-    color: "white",
+    backgroundColor: 'blue',
+    color: 'white',
     marginTop: 20,
     paddingHorizontal: 30,
     paddingVertical: 10,
-    borderRadius: 5,
+    borderRadius: 50,
   },
   signupContainer: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginTop: 20,
   },
   signupText: {
-    color: "white",
+    color: 'white',
     marginRight: 5,
-    fontFamily: "VarelaRound_400Regular",
+    fontFamily: 'VarelaRound_400Regular',
   },
   signupLink: {
-    color: "lightblue",
-    fontFamily: "VarelaRound_400Regular",
+    color: 'lightblue',
+    fontFamily: 'VarelaRound_400Regular',
   },
   forgotPasswordLink: {
     marginTop: 10,
-    color: "lightblue",
-    fontFamily: "VarelaRound_400Regular",
+    color: 'lightblue',
+    fontFamily: 'VarelaRound_400Regular',
   },
 });

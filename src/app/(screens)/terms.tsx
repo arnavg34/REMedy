@@ -114,7 +114,7 @@ export default function TermsScreen() {
               {isChecked1 && isChecked2 && (
               
                 <Animated.View entering={SlideInLeft}>
-                  <Link href="/signup" asChild>
+                  <Link href="/news" asChild>
                     <Button
                       size="$6"
                       backgroundColor="lightblue"
