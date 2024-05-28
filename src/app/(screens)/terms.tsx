@@ -4,9 +4,12 @@ import { H4, H5, H6, YStack, XStack, Checkbox, Button } from "tamagui";
 import { Check } from "@tamagui/lucide-icons";
 import Background from "@/src/components/background";
 import AppLoading from "expo-app-loading";
-import { useFonts, VarelaRound_400Regular } from "@expo-google-fonts/varela-round";
+import {
+  useFonts,
+  VarelaRound_400Regular,
+} from "@expo-google-fonts/varela-round";
 import Animated, { SlideInLeft } from "react-native-reanimated";
-import { Link } from "expo-router"; 
+import { Link } from "expo-router";
 export default function TermsScreen() {
   const [isChecked1, setIsChecked1] = useState(false);
   const [isChecked2, setIsChecked2] = useState(false);
@@ -36,14 +39,23 @@ export default function TermsScreen() {
               borderRadius="$4"
               style={{ fontFamily: "VarelaRound_400Regular" }}
             >
-              <H4 color="white" style={{ fontFamily: "VarelaRound_400Regular" }}>
+              <H4
+                color="white"
+                style={{ fontFamily: "VarelaRound_400Regular" }}
+              >
                 We classify our users' data as health data.
               </H4>
-              <H6 color="lightgrey" style={{ fontFamily: "VarelaRound_400Regular" }}>
+              <H6
+                color="lightgrey"
+                style={{ fontFamily: "VarelaRound_400Regular" }}
+              >
                 Your privacy is important to us. That's why we want to make sure
                 that your use of REMedy happens in a safe way.
               </H6>
-              <H6 color="lightgrey" style={{ fontFamily: "VarelaRound_400Regular" }}>
+              <H6
+                color="lightgrey"
+                style={{ fontFamily: "VarelaRound_400Regular" }}
+              >
                 For more information on how we use your data and your rights,
                 read our Privacy Policy and Terms of use.
               </H6>
@@ -74,7 +86,10 @@ export default function TermsScreen() {
                     {isChecked1 && <Check color="black" />}
                   </Checkbox.Indicator>
                 </Checkbox>
-                <H5 color="white" style={{ fontFamily: "VarelaRound_400Regular" }}>
+                <H5
+                  color="white"
+                  style={{ fontFamily: "VarelaRound_400Regular" }}
+                >
                   Yes, you have my permission to store my health data on
                   REMedy's secure servers.
                 </H5>
@@ -106,13 +121,15 @@ export default function TermsScreen() {
                     {isChecked2 && <Check color="black" />}
                   </Checkbox.Indicator>
                 </Checkbox>
-                <H5 color="white" style={{ fontFamily: "VarelaRound_400Regular" }}>
+                <H5
+                  color="white"
+                  style={{ fontFamily: "VarelaRound_400Regular" }}
+                >
                   Yes, REMedy may process my health data to improve the app's
                   functionality.
                 </H5>
               </XStack>
               {isChecked1 && isChecked2 && (
-              
                 <Animated.View entering={SlideInLeft}>
                   <Link href="/news" asChild>
                     <Button
@@ -125,7 +142,6 @@ export default function TermsScreen() {
                     </Button>
                   </Link>
                 </Animated.View>
-              
               )}
             </YStack>
           </View>
