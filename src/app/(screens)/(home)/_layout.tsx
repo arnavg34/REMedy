@@ -10,7 +10,7 @@ export default function TabLayout() {
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: "black",
+          backgroundColor: "#333333",
         },
       }}
     >

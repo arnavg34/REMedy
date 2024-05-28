@@ -1,9 +1,8 @@
-import { Link } from "expo-router";
-import React, { useState } from "react";
-import { StyleSheet, Animated, Easing } from "react-native";
+import { Link, useRouter } from "expo-router";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, Animated, Easing, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { Input, Button, Text, View } from "tamagui";
 import { LogIn } from "@tamagui/lucide-icons";
-import AppLoading from "expo-app-loading";
 import {
   useFonts,
   VarelaRound_400Regular,
@@ -13,19 +12,16 @@ import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
-import { useEffect } from 'react';
-
 
 export default function SignUpScreen() {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [signUpSuccess, setSignUpSuccess] = useState(false);
   const fadeAnim = useState(new Animated.Value(0))[0];
   const auth = FIREBASE_AUTH;
   const db = getFirestore();
-  const [isSignedIn, setIsSignedIn] = useState(false);
-
 
   const handleLogin = () => {
     // Perform login actions here
@@ -44,26 +40,18 @@ export default function SignUpScreen() {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
   
+      // After creating the user, store the username in Firestore
       await setDoc(doc(db, "users", user.uid), {
         email: email,
         username: username,
       });
   
-      console.log("User signed up:", user.uid);
-      
-      setIsSignedIn(true);
-    } catch (error: any) {
-      console.error(error);
-      alert("Sign up failed: " + error.message);
+      console.log("User created with ID: ", user.uid);
+    } catch (error) {
+      console.error("Error creating user: ", error);
     }
-    setLoading(false);
   };
-  
-  useEffect(() => {
-    if (isSignedIn) {
-      window.location.href = "/news";
-    }
-  }, [isSignedIn]);
+
   // Fade in animation
   Animated.timing(fadeAnim, {
     toValue: 1,
@@ -77,7 +65,7 @@ export default function SignUpScreen() {
   });
 
   if (!fontsLoaded) {
-    return <AppLoading />;
+    return null;
   } else {
     return (
       <Background>
@@ -105,26 +93,14 @@ export default function SignUpScreen() {
             secureTextEntry={true}
             placeholder="Enter your password"
           />
-          {isSignedIn ? (
-            <Link href="/news">
-              <Button
-                iconAfter={LogIn}
-                style={styles.button}
-                disabled={loading}
-              >
-                {loading ? "Signing Up..." : "Sign Up"}
-              </Button>
-            </Link>
-          ) : (
-            <Button
-              iconAfter={LogIn}
-              onPress={signUp}
-              style={styles.button}
-              disabled={loading}
-            >
-              {loading ? "Signing Up..." : "Sign Up"}
-            </Button>
-          )}
+          <Button
+            iconAfter={LogIn}
+            onPress={signUp}
+            style={styles.button}
+            disabled={loading}
+          >
+            {loading ? "Signing Up....." : "Sign Up"}
+          </Button>
         </Animated.View>
       </Background>
     );
@@ -134,6 +110,13 @@ export default function SignUpScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  innerContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  formContainer: {
     justifyContent: "center",
     alignItems: "center",
   },
@@ -149,15 +132,32 @@ const styles = StyleSheet.create({
     fontFamily: "VarelaRound_400Regular",
     color: "white",
   },
-  input: {
+  inputWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 10,
     width: "80%",
-    height: 40,
+  },
+  inputContainer: {
+    flex: 1,
     borderColor: "gray",
     borderWidth: 1,
-    paddingHorizontal: 10,
-    marginTop: 10,
-    borderRadius: 5,
+    borderRadius: 25,
     backgroundColor: "white",
+    marginLeft: 10,
+    height: 40,
+    justifyContent: 'center', // Center the Input vertically
+  },
+  input: {
+    flex: 1,
+    height: 40,
+    paddingLeft: 10,
+    borderRadius: 25,
+    fontFamily: "VarelaRound_400Regular",
+    color: "black",
+  },
+  icon: {
+    marginLeft: 5,
   },
   button: {
     backgroundColor: "blue",
@@ -184,5 +184,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
     color: "lightblue",
     fontFamily: "VarelaRound_400Regular",
+  },
+  backArrowContainer: {
+    position: 'absolute',
+    top: 40,
+    left: 10,
   },
 });
