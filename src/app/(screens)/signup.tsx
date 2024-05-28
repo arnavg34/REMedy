@@ -1,19 +1,18 @@
-import { Link, useRouter } from "expo-router";
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Animated, Easing, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from "react-native";
+import { StyleSheet, Animated, Easing, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, Alert } from "react-native";
 import { Input, Button, Text, View } from "tamagui";
 import { LogIn } from "@tamagui/lucide-icons";
-import {
-  useFonts,
-  VarelaRound_400Regular,
-} from "@expo-google-fonts/varela-round";
+import { useFonts, VarelaRound_400Regular } from "@expo-google-fonts/varela-round";
 import Background from "@/src/components/background";
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
-import { getFirestore } from "firebase/firestore";
+import { doc, setDoc, getFirestore } from "firebase/firestore";
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SplashScreen from 'expo-splash-screen';
+import { Link, useRouter } from "expo-router";
+
+
 
 export default function SignUpScreen() {
   const [email, setEmail] = useState("");
@@ -24,15 +23,24 @@ export default function SignUpScreen() {
   const fadeAnim = useState(new Animated.Value(0))[0];
   const auth = FIREBASE_AUTH;
   const db = getFirestore();
-  const router = useRouter(); // Use the useRouter hook for navigation
+  const router = useRouter(); 
+
+  useEffect(() => {
+    SplashScreen.hideAsync();
+  }, []);
 
   useEffect(() => {
     if (signUpSuccess) {
-      router.push('/terms'); // Navigate to the terms page after successful signup
+      router.push('/terms');
     }
   }, [signUpSuccess]);
 
   const signUp = async () => {
+    if (!email || !username || !password) {
+      Alert.alert('Error', 'All fields are required');
+      return;
+    }
+
     setLoading(true);
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -43,10 +51,11 @@ export default function SignUpScreen() {
       });
 
       console.log("User created with ID: ", user.uid);
-      await AsyncStorage.setItem('userToken', 'user_token_here');
-      setSignUpSuccess(true); // Set signUpSuccess to true to trigger the redirect
-    } catch (error) {
+      await AsyncStorage.setItem('userToken', user.uid);
+      setSignUpSuccess(true);
+    } catch (error: any) {
       console.error("Error creating user: ", error);
+      Alert.alert('Error', error.message);
     }
     setLoading(false);
   };
@@ -174,7 +183,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     marginLeft: 10,
     height: 40,
-    justifyContent: 'center', // Center the Input vertically
+    justifyContent: 'center', 
   },
   input: {
     flex: 1,

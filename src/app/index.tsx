@@ -1,39 +1,65 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Button, Text, View } from "tamagui";
 import { StyleSheet } from "react-native";
 import { router } from "expo-router";
-import AppLoading from "expo-app-loading";
-import { useFonts, VarelaRound_400Regular } from "@expo-google-fonts/varela-round";
+import * as SplashScreen from 'expo-splash-screen';
+import * as Font from 'expo-font';
+import { VarelaRound_400Regular } from "@expo-google-fonts/varela-round";
 import Background from "../components/background";
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
+import { StarFull } from "@tamagui/lucide-icons";
+import StarBackground from "../components/starBackground";
+
+
+SplashScreen.preventAutoHideAsync();
+
 
 export default function Index() {
-  const [loading, setLoading] = useState(true);
+  const [appIsReady, setAppIsReady] = useState(false);
   const [authenticated, setAuthenticated] = useState(false);
   const [userUsername, setUsername] = useState('');
 
   useEffect(() => {
-    const unsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
-      if (user) {
-        setAuthenticated(true);
+    async function prepare() {
+      try {
+        await Font.loadAsync({
+          VarelaRound_400Regular,
+        });
 
-        // Fetch user document from Firestore
-        const userDoc = await firebase.firestore().collection('users').doc(user.uid).get();
-        if (userDoc.exists) {
-          setUsername(userDoc.data().username || '');
-        } else {
-          console.log("No such document!");
-        }
-      } else {
-        setAuthenticated(false);
+        const unsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
+          if (user) {
+            setAuthenticated(true);
+
+            const userDoc = await firebase.firestore().collection('users').doc(user.uid).get();
+            if (userDoc.exists) {
+              setUsername(userDoc.data()?.username || '');
+            } else {
+              console.log("No such document!");
+            }
+          } else {
+            setAuthenticated(false);
+          }
+        });
+
+        return () => unsubscribe();
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        setAppIsReady(true);
       }
-      setLoading(false);
-    });
+    }
 
-    return () => unsubscribe();
+    prepare();
   }, []);
+
+  const onLayoutRootView = useCallback(async () => {
+    if (appIsReady) {
+      // Hide splash screen
+      await SplashScreen.hideAsync();
+    }
+  }, [appIsReady]);
 
   const handleButtonPress = () => {
     if (!authenticated) {
@@ -45,29 +71,23 @@ export default function Index() {
     }
   };
 
-  let [fontsLoaded] = useFonts({
-    VarelaRound_400Regular,
-  });
-
-  if (!fontsLoaded || loading) {
-    return <AppLoading />;
-  } else {
-    return (
-      <Background>
-        <View style={StyleSheet.absoluteFill}>
-          {/* Stars animation */}
-        </View>
-        <View style={styles.container}>
-          <Text style={styles.title}>Welcome to REMedy!</Text>
-          <Text style={styles.txt}>Having trouble sleeping?</Text>
-          {authenticated && <Text style={styles.email}>Let's track your sleep {userUsername}</Text>}
-          <Button style={styles.button} onPress={handleButtonPress}>
-            Let's Get Started!
-          </Button>
-        </View>
-      </Background>
-    );
+  if (!appIsReady) {
+    return null;
   }
+
+  return (
+    <Background>
+      <StarBackground />
+      <View style={styles.container} onLayout={onLayoutRootView}>
+        <Text style={styles.title}>Welcome to REMedy!</Text>
+        <Text style={styles.txt}>Having trouble sleeping?</Text>
+        {authenticated && <Text style={styles.email}>Let's track your sleep {userUsername}</Text>}
+        <Button style={styles.button} onPress={handleButtonPress}>
+          Let's Get Started!
+        </Button>
+      </View>
+    </Background>
+  );
 }
 
 const styles = StyleSheet.create({
