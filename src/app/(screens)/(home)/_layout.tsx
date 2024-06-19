@@ -5,6 +5,7 @@ import { Entypo } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { TamaguiProvider, createTamagui } from "@tamagui/core";
 import tamaguiConfig from "@/tamagui.config";
+import Icon_other from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export default function TabLayout() {
   return (
@@ -39,7 +40,9 @@ export default function TabLayout() {
           name="chatbot"
           options={{
             title: "PillowPal",
-            tabBarIcon: () => <Entypo name="chat" size={24} color="white" />,
+            tabBarIcon: () => (
+              <Icon_other name="chat-sleep" size={24} color="white" />
+            ),
           }}
         />
         <Tabs.Screen
