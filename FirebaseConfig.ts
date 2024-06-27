@@ -6,16 +6,22 @@ import "firebase/compat/auth";
 import { initializeAuth  } from 'firebase/auth';
 import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 
-
+const apikey = process.env.EXPO_PUBLIC_FIREBASEAPI_KEY;
+const authDomain = process.env.EXPO_PUBLIC_UTHDOMAIN_KEY;
+const projectId = process.env.EXPO_PUBLIC_PROJECTID_KEY;
+const storageBucket = process.env.EXPO_PUBLIC_STORAGEBUCKET_KEY;
+const messagingSenderId = process.env.EXPO_PUBLIC_MESSAGINGSENDERID_KEY;
+const appId = process.env.EXPO_PUBLIC_APPID_KEY;
+const apimeasurementIdUrl = process.env.EXPO_PUBLIC_MEASUREMENTID_KEY;
 
 export const firebaseConfig = {
-  apiKey: "AIzaSyDHI0OC0tAEC5C3AMrVtHKNEt5yFljsDkc",
-  authDomain: "remedy-75424.firebaseapp.com",
-  projectId: "remedy-75424",
-  storageBucket: "remedy-75424.appspot.com",
-  messagingSenderId: "248391272452",
-  appId: "1:248391272452:web:5a498b3090650bacb0cd51",
-  measurementId: "G-3B86Z9F73C"
+  apiKey: apikey,
+  authDomain: authDomain,
+  projectId: projectId,
+  storageBucket: storageBucket,
+  messagingSenderId: messagingSenderId,
+  appId: appId,
+  measurementId: apimeasurementIdUrl
 };
 firebase.initializeApp(firebaseConfig);
 const app = initializeApp(firebaseConfig);
