@@ -1,4 +1,4 @@
-import { API_KEY } from "../constants/NewsConstants";
+const API_KEY = process.env.EXPO_PUBLIC_NEWSAPI_KEY;
 
 export async function services(q) {
   let url =
