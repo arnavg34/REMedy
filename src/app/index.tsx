@@ -11,7 +11,8 @@ import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import { StarFull } from "@tamagui/lucide-icons";
 import StarBackground from "../components/starBackground";
-
+import registerNNPushToken from 'native-notify';
+import NotificationComponent from "../components/pushNotification";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -20,7 +21,7 @@ export default function Index() {
   const [appIsReady, setAppIsReady] = useState(false);
   const [authenticated, setAuthenticated] = useState(false);
   const [userUsername, setUsername] = useState('');
-
+  registerNNPushToken(22228, 'dD3cb1Gf1MhwmDtzijlbuT');
   useEffect(() => {
     async function prepare() {
       try {
@@ -85,6 +86,7 @@ export default function Index() {
         <Button style={styles.button} onPress={handleButtonPress}>
           Let's Get Started!
         </Button>
+        
       </View>
     </Background>
   );

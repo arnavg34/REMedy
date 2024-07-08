@@ -41,7 +41,7 @@ const App = () => {
     setInputText('');
 
     try {
-      const response = await fetch(CHAT_GPT_API_URL, {
+      const response = await fetch(CHAT_GPT_API_URL as string, {
         method: "POST",
         headers: {
           'Accept': 'application/json',
