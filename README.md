@@ -16,8 +16,6 @@ REMedy is a mobile application designed to promote healthy sleep habits by lever
 - **Database:** Google Firebase
 - **APIs & Integrations:** Apple HealthKit, OpenAI API
 
-## 📸 Screenshots
-*(Add project screenshots here)*
 
 ## 🚀 Getting Started
 ### Prerequisites
