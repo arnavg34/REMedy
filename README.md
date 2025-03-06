@@ -1,50 +1,49 @@
-# Welcome to your Expo app 👋
+# REMedy - Sleep Tracking App 🌙
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## 📌 About REMedy
+REMedy is a mobile application designed to promote healthy sleep habits by leveraging **Apple HealthKit**, **AI-powered insights**, and **social competition** to encourage better rest patterns. The app tracks sleep quality, provides personalized insights, and integrates **OpenAI's API** for real-time analysis and recommendations.
 
-## Get started
+## 🚀 Features
+- 📊 **Sleep Tracking**: Seamless integration with **Apple HealthKit** to monitor sleep cycles.
+- 🤖 **AI-Powered Insights**: Uses **OpenAI's API** to analyze sleep data and provide personalized feedback.
+- 🔥 **Social Competition**: Engage in sleep challenges with friends to build healthier habits.
+- 📈 **Real-Time Analytics**: Visualize sleep trends with interactive graphs and insights.
+- 🔄 **Cloud Syncing**: Securely stores and syncs data using **Google Firebase**.
 
-1. Install dependencies
+## 🛠️ Tech Stack
+- **Frontend:** React Native, Expo, TypeScript
+- **Backend:** Node.js, Firebase, OpenAI API
+- **Database:** Google Firebase
+- **APIs & Integrations:** Apple HealthKit, OpenAI API
 
-   ```bash
-   npm install
-   ```
+## 📸 Screenshots
+*(Add project screenshots here)*
 
-2. Start the app
+## 🚀 Getting Started
+### Prerequisites
+- Install [Node.js](https://nodejs.org/)
+- Install [Expo CLI](https://expo.dev/)
 
-   ```bash
-    npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
+### Installation
 ```bash
-npm run reset-project
+# Clone the repository
+git clone https://github.com/arnavg34/REMedy.git
+cd REMedy
+
+# Install dependencies
+npm install
+
+# Start the development server
+npx expo start
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## 🤝 Contributing
+Contributions are welcome! If you'd like to contribute, please **fork** the repository and create a **pull request**.
 
-## Learn more
+## 📫 Contact
+For any questions or collaboration opportunities, reach out:
+📩 **Email**: agupta3410@gmail.com  
+👨‍💻 **GitHub**: [github.com/arnavg34](https://github.com/arnavg34)  
 
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+---
+🚀 **Let’s make better sleep habits a reality!**
